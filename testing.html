@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>l444vish</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baskervville+SC&display=swap');
+</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+
+    .no-select {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none;    /* Firefox */
+      -ms-user-select: none;     /* Internet Explorer/Edge */
+      user-select: none;         /* Standard */
+    }
+*, *::before, *::after {
+    box-sizing: border-box;
+  font-family: "Baskervville SC", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+
+            color: #fff;
+            background: #000;
+
+        }
+        #scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+        h1 {
+            position: fixed;
+      
+            font-size: 5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glitter 5s linear infinite;
+            position: relative;
+        }
+
+        @keyframes glitter {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+        h1::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            text-shadow: 
+                0 0 10px #fff,
+                0 0 20px #fff,
+                0 0 30px #fff,
+                0 0 40px #0ff,
+                0 0 70px #0ff,
+                0 0 80px #0ff,
+                0 0 100px #0ff,
+                0 0 150px #0ff;
+            animation: glitter-shadow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glitter-shadow {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+        .ascii-face {
+    text-align: center;
+
+
+            font-size: 2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+    height: 100px;
+padding: 12px;
+   overflow: hidden;
+        }
+        .angel-number {
+
+            font-size: 2.5rem;
+            margin: 1rem 0;
+            cursor: help;
+
+        }
+.message {
+    font-size: 1.5rem;
+    text-align: center;
+    max-width: 80%;
+    margin-top: 2rem;
+    opacity: 0;
+    transition: opacity 1s ease;
+    height: 100px; /* Adjust height as needed */
+    overflow: hidden;
+}
+footer {
+    text-align: center;
+    position: absolute; /* Change to relative or fixed */
+    width: 100%;
+       bottom: 0;
+    color: rgba(255, 255, 255, 0.8);
+
+}
+        .content-wrapper {
+            max-width: 850px;
+            text-align: center;
+            padding: 20px;
+        }
+
+
+.top-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Ensures the menu stays on top */
+}
+
+.top-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.top-menu li {
+    margin: 0 15px;
+}
+
+.top-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.top-menu a:hover {
+    color: #ff00ff; /* Change to the desired hover color */
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="scene-container"></div>
+<nav class="top-menu">
+    <ul>
+        <li><a href="/art">art</a></li>
+    </ul>
+</nav>
+    <div class="overlay no-select">
+
+<a style="text-decoration:none;" href="#">
+        <h1 data-text="l444vish">l444vish</h1>
+</a>
+        <div class="content-wrapper">
+<p style="font-size: 1.4rem; padding: 10px;">The angel number <b>444</b> is a powerful sign of divine protection and guidance, symbolizing that you are on the right path in life and being supported by higher beings, such as angels. <b>444</b> represents stability, alignment, and the importance of building strong foundations for your future. Seeing <b>444</b> is a reminder to trust your intuition, stay positive, and remain focused on your goals, as your thoughts and intentions are manifesting quickly. <b>444</b> number also signals spiritual growth and awakening, encouraging you to embrace the divine support surrounding you on your journey.</p>
+        <div class="ascii-face">(◕‿◕)</div>
+        <div class="angel-number no-select">444</div>
+      </div>
+        <div class="message"></div>
+
+    <footer>
+     <p>༺ 444 ༻<br>&copy; 2024 l444vish. Guided & Protected by the Light of the Angels ⋆˙⟡</p>
+    </footer>
+
+    <script>
+        let scene, camera, renderer, particles;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('scene-container').appendChild(renderer.domElement);
+
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                vertices.push(x, y, z);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+            const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.x += 0.0005;
+            particles.rotation.y += 0.0005;
+            renderer.render(scene, camera);
+        }
+
+        init();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Interaction
+        const overlay = document.querySelector('.overlay');
+        const angelNumber = document.querySelector('.angel-number');
+        const message = document.querySelector('.message');
+        const asciiFace = document.querySelector('.ascii-face');
+
+        const messages = [
+            "You are on a cosmic journey of self-discovery.",
+            "The universe whispers its secrets to those who listen.",
+            "In the tapestry of existence, you are a shining thread.",
+            "Your thoughts are ripples in the ocean of consciousness.",
+            "Embrace the void, for in nothingness lies infinite potential.",
+            "The light within you is a beacon to the world.",
+            "Stars are the punctuation in the cosmic story of your life.",
+            "Find peace in the quiet moments between the stars.",
+            "Your spirit is as boundless as the night sky.",
+            "Let the energy of the universe flow through you.",
+            "Every heartbeat is a symphony of existence.",
+            "Your dreams are the whispers of your soul.",
+            "The cosmos aligns to support your every step.",
+            "You are a celestial being, bathed in stardust.",
+            "In the silence of the night, hear the songs of the stars.",
+            "Your path is illuminated by the light of a thousand stars.",
+            "Embrace the magic of the universe unfolding within you.",
+            "The universe dances to the rhythm of your soul.",
+            "Your essence is intertwined with the fabric of the cosmos.",
+            "Stars guide your journey with their eternal light.",
+            "Your life is a constellation of dreams and desires.",
+            "The universe reflects your inner light.",
+            "Celestial harmony flows through your being.",
+            "Every star is a symbol of your inner strength.",
+            "Your spirit is a shining star in the cosmic sea.",
+            "Cosmic energies are guiding you towards your destiny.",
+            "You are a luminous thread in the cosmic tapestry.",
+            "The universe is a canvas for your dreams.",
+            "Stars whisper the secrets of the universe to your soul.",
+            "Your essence is a radiant light in the darkness.",
+            "The cosmos cradles you in its eternal embrace.",
+            "You are a cosmic traveler on a journey of discovery.",
+            "Let the stardust of the universe inspire your heart.",
+            "Your presence lights up the celestial expanse.",
+            "The universe is your guide on this mystical journey.",
+            "Your soul is a reflection of the cosmic light.",
+            "The stars are your companions in this celestial dance.",
+            "Every star is a guidepost on your path to enlightenment.",
+            "The universe is a mirror reflecting your inner beauty.",
+            "Your spirit shines as brightly as the stars above.",
+            "The cosmos aligns to bring your dreams to fruition.",
+            "Your journey is a divine dance with the universe.",
+            "Stars are the keepers of your dreams and aspirations.",
+            "Your inner light illuminates the darkest night.",
+            "Cosmic forces are at work to guide your every step.",
+            "The universe sings a lullaby of cosmic harmony for you.",
+            "Your path is illuminated by the glow of the stars.",
+            "In the vast expanse of the cosmos, you are a radiant star.",
+            "Every star in the sky is a reflection of your divine essence.",
+            "The universe unfolds its mysteries before you."
+        ];
+
+        const asciiVariations = ['(◕‿◕)', '(⌒‿⌒)', '(✿◠‿◠)', '(^‿^)', '(＾▽＾)', '(•‿•)', '(◠‿◠)', '(｡♥‿♥｡)', '(｡◕‿‿◕｡)', '(✧‿✧)', '(¬‿¬)', '(˘︶˘)', '(¬_¬)', '(ಥ﹏ಥ)', '(☞ﾟヮﾟ)☞', '(╯°□°)╯︵ ┻━┻', '(╯︵╰,)', '(ノಠ益ಠ)ノ彡┻━┻', '(⊙_☉)', '(⌐■_■)', '(ง •̀_•́)ง', '(・_・)', '(｡•́︿•̀｡)', '( ˘︹˘ )', '(✧ω✧)', '(✌︎’ω’)✌︎', '(╥﹏╥)', '(☼.☼)', '(×_×)', '(＾-＾)', '(⊙.⊙)', '(ಠ_ಠ)', '(︶ω︶)', '(⌒_⌒)', '(⩲_⩲)', '(´･_･`)', '(°ロ°) !', '(◔◡◔)', '(๑˃̵ᴗ˂̵)', '(˙︶˙)', '(｡•́‿•̀｡)', '(⇀‸↼‶)', '(ㆆ_ㆆ)', '(✿◡‿◡)', '(★‿★)', '(╰(°▽°)╯)', '(╰(°▽°)╯)', '(˵•́ ₃ •̀˵)', '(・∀・)', '(╭☞•̀ ᗜ •́)╭☞', '(˘•̥-•̥˘)', '(❍ᴥ❍)', '(。⌒∇⌒)。', '(≧∇≦)', '(⌐■_■)', '(╥﹏╥)', '(•ω•)', '(╯°□°)╯︵ ┻━┻', '(╯︵╰,)', '(°ロ°) !', '(◠‿◠)', '(｡•́‿•̀｡)', '(¬‿¬)', '(๑˃̵ᴗ˂̵)', '(◡‿◡)', '(✧ω✧)', '(▰˘︹˘▰)', '(•‿•)', '(╯°□°)╯︵ ┻━┻', '(◡‿◡)', '(▰˘︹˘▰)', '(╯‵□′)╯', '(╭☞•̀ ᗜ •́)╭☞', '(◕‿◕)', '(✿◠‿◠)', '(╥﹏╥)', '(◡‿◡)', '(⌐■_■)', '(◕‿◕)', '(╯°□°)╯︵ ┻━┻', '(✿◠‿◠)', '(✌︎’ω’)✌︎', '(╯︵╰,)', '(｡•́︿•̀｡)', '(⌒_⌒)', '(⌐■_■)', '(๑˃̵ᴗ˂̵)', '(◕‿◕)', '(｡•́‿•̀｡)', '(¬‿¬)', '(⌐■_■)', '(╯°□°)╯︵ ┻━┻', '(╥﹏╥)', '(¬‿¬)', '(⌐■_■)', '(＾▽＾)', '(▰˘︹˘▰)', '(˘︹˘)', '(｡•́︿•̀｡)', '(╯°□°)╯︵ ┻━┻', '(╰(°▽°)╯)', '(╭☞•̀ ᗜ •́)╭☞', '(◡‿◡)', '(▰˘︹˘▰)', '(¬‿¬)', '(＾-＾)', '(╯°□°)╯︵ ┻━┻', '(◕‿◕)', '(⌐■_■)', '(⌒_⌒)', '(✿◠‿◠)', '(°ロ°) !', '(╯‵□′)╯', '(◡‿◡)', '(◔̯◔)', '(•‿•)', '(✧ω✧)', '(╯°□°)╯︵ ┻━┻', '(╥﹏╥)', '(◡‿◡)', '(๑˃̵ᴗ˂̵)', '(⌐■_■)', '(╯°□°)╯︵ ┻━┻', '(╰(°▽°)╯)', '(•‿•)', '(¬‿¬)', '(⌐■_■)', '(✧ω✧)', '(╭☞•̀ ᗜ •́)╭☞', '(◠‿◠)', '(✌︎’ω’)✌︎', '(╯︵╰,)', '(｡•́︿•̀｡)', '(╯°□°)╯︵ ┻━┻', '(＾▽＾)', '(◡‿◡)', '(✿◠‿◠)', '(＾-＾)', '(╰(°▽°)╯)', '(⌐■_■)', '(╭☞•̀ ᗜ •́)╭☞', '(◡‿◡)', '(╯°□°)╯︵ ┻━┻'];
+
+        angelNumber.addEventListener('click', () => {
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            message.textContent = randomMessage;
+            message.style.opacity = 1;
+            setTimeout(() => {
+                message.style.opacity = 0;
+            }, 5000);
+        });
+
+        asciiFace.addEventListener('click', () => {
+            asciiFace.textContent = asciiVariations[Math.floor(Math.random() * asciiVariations.length)];
+        });
+
+        // Fading functionality
+        let fadeTimeout;
+
+        function startFadeTimeout() {
+            clearTimeout(fadeTimeout);
+            overlay.style.opacity = 1;
+            fadeTimeout = setTimeout(() => {
+                overlay.style.opacity = 0;
+            }, 5000);
+        }
+
+        document.addEventListener('mousemove', startFadeTimeout);
+        document.addEventListener('click', startFadeTimeout);
+
+        // Initial fade-in
+        startFadeTimeout();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('background-music');
+            audio.volume = 0.2; // Set volume to 0.2 initially
+
+            document.addEventListener('mousemove', () => {
+                if (audio.paused) {
+                    audio.play().catch(error => {
+                        console.log('Error playing audio:', error);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+<audio id="background-music" src="https://files.catbox.moe/xp91po.mp3"></audio>
+
+</html>
